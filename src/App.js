@@ -4,48 +4,16 @@ import Footer from "./Navigation/Footer.js";
 import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+import { getSigner } from './connectWallet.js';
 
 const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
-// Gets a default provider (in production use something else like infura/alchemy)
-// const provider = ethers.providers.getDefaultProvider(
-//   "sepolia"
-// );
-// A Web3Provider wraps a standard Web3 provider, which is
-// what MetaMask injects as window.ethereum into each page
-const provider = new ethers.providers.Web3Provider(window.ethereum)
-var signer;
-
 function App() {
-  async function connectWallet() {
-    // MetaMask requires requesting permission to connect users accounts
-    await provider.send("eth_requestAccounts", []);
-
-    signer = provider.getSigner()
-  }
-
-  // async function getAttestation() {
-  //   try {
-  //     const eas = new EAS(EASContractAddress);
-  //     // Connects an ethers style provider/signingProvider to perform read/write functions.
-  //     // MUST be a signer to do write operations!
-  //     eas.connect(provider);
-
-  //     const uid = "0xe1f163455f5594b24693ad2c66aca8ac83ef99140f20c48cd6f4d1e0de911e29"; //Sepolia attestation
-
-  //     const attestation = await eas.getAttestation(uid);
-
-  //     console.log(attestation);
-  //   } catch (error) {
-  //     console.log("getAttestation Error: ", error);
-  //   }
-  // }
 
   async function createAttestation() {
     try {
-      eas.connect(signer);
-      console.log("Signer connected");
+      eas.connect(getSigner());
 
       // Initialize SchemaEncoder with the schema string
 

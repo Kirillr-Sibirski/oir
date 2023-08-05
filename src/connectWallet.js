@@ -7,6 +7,6 @@ export const Connect = async function() {
         await provider.send("eth_requestAccounts", []);
 }
 
-export const getSigner = async function() {
+export const getSigner = function() {
     return provider.getSigner()
 }
