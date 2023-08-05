@@ -22,30 +22,43 @@ function Attestation() {
         if(checkbox) {
             try {
                 eas.connect(getSigner());
-          
-                // Initialize SchemaEncoder with the schema string
-                const schemaEncoder = new SchemaEncoder("string ProjectName,address[] SmartContracts");
-                const encodedData = schemaEncoder.encodeData([
-                  { name: "ProjectName", value: "OIR", type: "string" },
-                  { name: "SmartContracts", value: ["0xc0ffee254729296a45a3885639AC7E10F9d54979", "0x999999cf1046e68e36E1aA2E0E07105eDDD1f08E"], type: "address[]" }, // custom made attestation
-                ]);
                 
-                const schemaUID = "0xf66413fd6e398c38767ac38ce1ec2da4ddf3fb2a823cb552c38fad302e32af95";
-                
-                const tx = await eas.attest({
-                  schema: schemaUID,
-                  data: {
-                    recipient: "0x8BF7314a19A4e66D0bfAd235f3422464292a948D",
-                    expirationTime: 0,
-                    revocable: false,
-                    data: encodedData,
-                  },
-                });
-          
-                console.log("TX: ",tx);
-                const newAttestationUID = await tx.wait();
-                
-                console.log("New attestation UID:", newAttestationUID);
+                // String manipulations
+                let contractsArray = contracts.split(",");
+                contractsArray = contractsArray.replace(/ /g,'');
+
+                let state = true;
+                for (let i = 0; i < contractsArray.length; i++) {
+                    if(!ethers.utils.isAddress(contractsArray[i])) state = false; // Check if it a legit contract address
+                }
+                if (state) {
+                    // Initialize SchemaEncoder with the schema string
+                    const schemaEncoder = new SchemaEncoder("string ProjectName,address[] SmartContracts");
+                    const encodedData = schemaEncoder.encodeData([
+                    { name: "ProjectName", value: name, type: "string" },
+                    { name: "SmartContracts", value: contractsArray, type: "address[]" }, // custom made attestation
+                    ]);
+                    
+                    const schemaUID = "0xf66413fd6e398c38767ac38ce1ec2da4ddf3fb2a823cb552c38fad302e32af95";
+                    
+                    const tx = await eas.attest({
+                    schema: schemaUID,
+                    data: {
+                        recipient: "",
+                        expirationTime: 0,
+                        revocable: false,
+                        data: encodedData,
+                    },
+                    });
+            
+                    console.log("TX: ",tx);
+                    const newAttestationUID = await tx.wait();
+                    
+                    console.log("New attestation UID:", newAttestationUID);
+                } else {
+                    console.log("createAttestation Error: invalid smart contracts array input");
+                    alert("Invalid smart contract(s) address");
+                }
               } catch (error) {
                 console.log("createAttestation Error: ", error);
               }
