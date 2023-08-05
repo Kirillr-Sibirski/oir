@@ -7,40 +7,49 @@ import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestat
 import { getSigner } from '.././connectWallet.js';
 
 function Attestation() {
+    const [name, setName] = React.useState("");
+    const onChangeName = ({ target }) => setName(target.value);
+    const [contracts, setContracts] = React.useState("");
+    const onChangeContracts = ({ target }) => setContracts(target.value);
+    const [checkbox, setCheckbox] = React.useState("");
+    const onChangeCheckbox = ({ target }) => setCheckbox(!target.value);
+
+
     const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createAttestation() {
-        try {
-          eas.connect(getSigner());
-    
-          // Initialize SchemaEncoder with the schema string
-          const schemaEncoder = new SchemaEncoder("string ProjectName,address[] SmartContracts");
-          const encodedData = schemaEncoder.encodeData([
-            { name: "ProjectName", value: "OIR", type: "string" },
-            { name: "SmartContracts", value: ["0xc0ffee254729296a45a3885639AC7E10F9d54979", "0x999999cf1046e68e36E1aA2E0E07105eDDD1f08E"], type: "address[]" }, // custom made attestation
-          ]);
+        if(checkbox) {
+            try {
+                eas.connect(getSigner());
           
-          const schemaUID = "0xf66413fd6e398c38767ac38ce1ec2da4ddf3fb2a823cb552c38fad302e32af95";
+                // Initialize SchemaEncoder with the schema string
+                const schemaEncoder = new SchemaEncoder("string ProjectName,address[] SmartContracts");
+                const encodedData = schemaEncoder.encodeData([
+                  { name: "ProjectName", value: "OIR", type: "string" },
+                  { name: "SmartContracts", value: ["0xc0ffee254729296a45a3885639AC7E10F9d54979", "0x999999cf1046e68e36E1aA2E0E07105eDDD1f08E"], type: "address[]" }, // custom made attestation
+                ]);
+                
+                const schemaUID = "0xf66413fd6e398c38767ac38ce1ec2da4ddf3fb2a823cb552c38fad302e32af95";
+                
+                const tx = await eas.attest({
+                  schema: schemaUID,
+                  data: {
+                    recipient: "0x8BF7314a19A4e66D0bfAd235f3422464292a948D",
+                    expirationTime: 0,
+                    revocable: false,
+                    data: encodedData,
+                  },
+                });
           
-          const tx = await eas.attest({
-            schema: schemaUID,
-            data: {
-              recipient: "0x8BF7314a19A4e66D0bfAd235f3422464292a948D",
-              expirationTime: 0,
-              revocable: false,
-              data: encodedData,
-            },
-          });
-    
-          console.log("TX: ",tx);
-          const newAttestationUID = await tx.wait();
-          
-          console.log("New attestation UID:", newAttestationUID);
-        } catch (error) {
-          console.log("createAttestation Error: ", error);
+                console.log("TX: ",tx);
+                const newAttestationUID = await tx.wait();
+                
+                console.log("New attestation UID:", newAttestationUID);
+              } catch (error) {
+                console.log("createAttestation Error: ", error);
+              }
         }
-    
     }
     return (
         <div class="bg-[#050401]">
@@ -56,15 +65,33 @@ function Attestation() {
                     <form>
                         <div class="mb-6">
                             <label for="default-input" class="block mb-2 text-sm font-medium text-[#fffaff] dark:text-[#fffaff]">Project name</label>
-                            <input type="text" id="default-input" class="bg-[#303036] text-gray-900 text-sm rounded-lg focus:ring-[#30bced] focus:border-[#30bced] block w-full p-2.5 dark:bg-[#303036] dark:border-[#30bced] dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#30bced] dark:focus:border-[#30bced]" />
+                            <input 
+                                type="text" 
+                                id="default-input" 
+                                class="bg-[#303036] text-gray-900 text-sm rounded-lg focus:ring-[#30bced] focus:border-[#30bced] block w-full p-2.5 dark:bg-[#303036] dark:border-[#30bced] dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#30bced] dark:focus:border-[#30bced]" 
+                                value={name}
+                                onChange={onChangeName}
+                            />
                         </div>
                         <div class="mb-6">
                             <label for="large-input" class="block mb-2 text-sm font-medium text-[#fffaff] dark:text-[#fffaff]">Enter all of the project's smart contract addresses separated by comma (,)</label>
-                            <input type="text" id="large-input" class="block w-full p-4 text-gray-900 rounded-lg bg-[#303036] sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-[#303036] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input 
+                                type="text" 
+                                id="large-input" 
+                                class="block w-full p-4 text-gray-900 rounded-lg bg-[#303036] sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-[#303036] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                value={contracts}
+                                onChange={onChangeContracts}
+                            />
                         </div>
                         <div class="flex items-start mb-6">
                             <div class="flex items-center h-5">
-                            <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-[#303036] rounded bg-[#fffaff] focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required />
+                            <input 
+                                id="remember" 
+                                type="checkbox" 
+                                value={checkbox}
+                                onChange={onChangeCheckbox}
+                                class="w-4 h-4 border border-[#303036] rounded bg-[#fffaff] focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required 
+                            />
                             </div>
                             <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-[#fffaff]">I understood how this <a href="#" class="text-[#30bced] hover:underline dark:text-[#30bced]">works</a>.</label>
                         </div>
