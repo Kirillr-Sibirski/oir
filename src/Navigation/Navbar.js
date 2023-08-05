@@ -3,8 +3,8 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Connect } from '../connectWallet.js'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Submit your project', href: '#', current: false },
+  { name: 'Dashboard', href: '/' },
+  { name: 'Submit your project', href: '/attestation' },
 ]
 
 function classNames(...classes) {
@@ -37,7 +37,7 @@ export default function Navbar() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-[#30bced] text-[#fffaff]' : 'text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]',
+                          'text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                         aria-current={item.current ? 'page' : undefined}

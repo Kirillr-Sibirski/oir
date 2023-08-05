@@ -1,9 +1,12 @@
 import "./index.css";
-import Homepage from "./pages/Homepage.js";
 import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { getSigner } from './connectWallet.js';
+import { BrowserRouter as Router, Routes, Route }
+    from 'react-router-dom';
+import Home from './pages/Homepage.js';
+import Attestation from './pages/Attestation.js'; 
 
 const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
@@ -63,9 +66,12 @@ function App() {
   }
 
   return (
-    <div>
-      <Homepage />
-    </div>
+    <Router>
+        <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/attestation' element={<Attestation />} />
+        </Routes>
+    </Router>
   );
 }
 
