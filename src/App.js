@@ -100,8 +100,8 @@ function App() {
             <Navbar />
             <div class="relative overflow-x-auto">
               <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                      <tr>
+                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#303036] dark:text-[#fffaff]">
+                      <tr class="border-b dark:border-gray-700">
                           <th scope="col" class="px-6 py-3">
                               Rank
                           </th>
@@ -126,7 +126,7 @@ function App() {
                       </tr>
                   </thead>
                   <tbody>
-                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               #1
                           </th>
@@ -149,7 +149,7 @@ function App() {
                               $2999
                           </td>
                       </tr>
-                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               #2
                           </th>
@@ -172,9 +172,124 @@ function App() {
                               $1999
                           </td>
                       </tr>
-                      <tr class="bg-white dark:bg-gray-800">
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               #3
+                          </th>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              #4
+                          </th>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              #5
+                          </th>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              #6
+                          </th>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-[#303036] dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              #7
+                          </th>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                          <td class="px-6 py-4">
+                              Black
+                          </td>
+                          <td class="px-6 py-4">
+                              Accessories
+                          </td>
+                          <td class="px-6 py-4">
+                              $99
+                          </td>
+                      </tr>
+                      <tr class="bg-white dark:bg-[#303036] dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              #8
                           </th>
                           <td class="px-6 py-4">
                               Black
