@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Connect } from '../connectWallet.js'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Submit your project', href: '#', current: false },
-  { name: 'Connect wallet', href: '#', current: false },
 ]
 
 function classNames(...classes) {
@@ -45,6 +45,8 @@ export default function Navbar() {
                         {item.name}
                       </a>
                     ))}
+                    <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
+                          rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Connect}>Connect wallet</a>
                   </div>
                 </div>
               </div>
