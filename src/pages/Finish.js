@@ -8,7 +8,7 @@ export function setUID(id) {
     UID = id;
 }
 
-async function Finish() {
+function Finish() {
     const [isLoading, setIsLoading] = React.useState(true);
     
     // Create a while loop that requests data from the resolver contract constantly until it receives the impact rank and display it below

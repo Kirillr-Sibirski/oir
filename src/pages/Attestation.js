@@ -17,8 +17,10 @@ function Attestation() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    // Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.' TRY CHANGING NETWORK TO SEPOLIA
+    // When changed to Sepolia - Error: Unable to process attestation events
 
-    const EASContractAddress = "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli //"0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
+    const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createAttestation() {
@@ -45,35 +47,36 @@ function Attestation() {
                         console.log("Address verification test passed");
 
                         setIsLoading(true); // show loading icon
-
+                        /*
                         // Initialize SchemaEncoder with the schema string
                         const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
                         console.log("Schema encoder test passed: ",schemaEncoder);
 
                         const encodedData = schemaEncoder.encodeData([
-                        { name: "projectName", type: "string", value: name }, //for some reason param "value" doesn't show up
-                        { name: "smartContracts", type: "address[]", value: contractsArray },
+                        { name: "projectName", value: name, type: "string"}, //for some reason param "value" doesn't show up
+                        { name: "smartContracts", value: contractsArray, type: "address[]" },
                         ]);
                         console.log("encodedData test passed: ",encodedData)
 
-                        const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli
+                        const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // Sepolia schema //"0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli
                         
                         const tx = await eas.attest({
-                        schema: schemaUID,
-                        data: {
-                            recipient: "",
-                            expirationTime: 0,
-                            revocable: false,
-                            data: encodedData,
-                        },
+                            schema: schemaUID,
+                            data: {
+                                recipient: "0xbD2245353f27CA2F1915443d922eD4a8d25c45a6",
+                                expirationTime: 0,
+                                revocable: false,
+                                data: encodedData,
+                            },
                         });
                 
                         console.log("TX test passed: ",tx); // Transaction has been created
                         const newAttestationUID = await tx.wait();
-                        
+                        */
+                       const newAttestationUID = 1; //temporary
                         console.log("New attestation UID:", newAttestationUID);
                         setUID(newAttestationUID);
-                        this.props.history.push('/finish'); // Redirect user to finish page
+                        window.location.replace('/finish'); // Redirect user to finish page
 
                     } else {
                         console.log("createAttestation Error: invalid smart contracts array input");
