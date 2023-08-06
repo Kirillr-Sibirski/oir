@@ -11,11 +11,11 @@ function Attestation() {
     const onChangeName = ({ target }) => setName(target.value);
     const [contracts, setContracts] = React.useState("");
     const onChangeContracts = ({ target }) => setContracts(target.value);
-    const [checkbox, setCheckbox] = React.useState("");
+    const [checkbox, setCheckbox] = React.useState(false);
     const onChangeCheckbox = ({ target }) => setCheckbox(!target.value);
 
 
-    const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
+    const EASContractAddress = "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli //"0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createAttestation() {
@@ -31,20 +31,27 @@ function Attestation() {
                     let contractsNoSpace = contracts.replace(/ /g,''); // Delete all spaces
                     let contractsArray = contractsNoSpace.split(","); // Turn it into an array
 
+                    console.log("Name: ", name)
+                    console.log("Contracts: ", contractsArray);
+
                     let state = true;
                     for (let i = 0; i < contractsArray.length; i++) {
                         if(!ethers.utils.isAddress(contractsArray[i])) state = false; // Check if it a legit contract address
                     }
                     if (state) {
                         console.log("Address verification test passed");
+
                         // Initialize SchemaEncoder with the schema string
-                        const schemaEncoder = new SchemaEncoder("string ProjectName,address[] SmartContracts");
+                        const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
+                        console.log("Schema encoder test passed: ",schemaEncoder);
+
                         const encodedData = schemaEncoder.encodeData([
-                        { name: "ProjectName", value: name, type: "string" },
-                        { name: "SmartContracts", value: contractsArray, type: "address[]" }, // custom made attestation
+                        { name: "projectName", value: name, type: "string" }, //for some reason param "value" doesn't get through
+                        { name: "smartContracts", value: contractsArray, type: "address[]" },
                         ]);
-                        
-                        const schemaUID = "0xf66413fd6e398c38767ac38ce1ec2da4ddf3fb2a823cb552c38fad302e32af95";
+                        console.log("encodedData test passed: ",encodedData)
+
+                        const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli
                         
                         const tx = await eas.attest({
                         schema: schemaUID,
@@ -56,7 +63,7 @@ function Attestation() {
                         },
                         });
                 
-                        console.log("TX: ",tx);
+                        console.log("TX test passed: ",tx); // Transaction has been created
                         const newAttestationUID = await tx.wait();
                         
                         console.log("New attestation UID:", newAttestationUID);
@@ -114,7 +121,8 @@ function Attestation() {
                             </div>
                             <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-[#fffaff]">I understood how this <a href="#" class="text-[#30bced] hover:underline dark:text-[#30bced]">works</a>.</label>
                         </div>
-                        <button type="submit" class="text-white bg-[#30bced] hover:bg-[#30bced] focus:ring-4 focus:outline-none focus:ring-[#30bced] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#30bced] dark:hover:bg-[#30bced] dark:focus:ring-[#30bced]" onClick={createAttestation}>Submit</button>
+                        {/* Change type to "button" if want to see tests on console */}
+                        <button type="button" class="text-white bg-[#30bced] hover:bg-[#30bced] focus:ring-4 focus:outline-none focus:ring-[#30bced] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#30bced] dark:hover:bg-[#30bced] dark:focus:ring-[#30bced]" onClick={createAttestation}>Submit</button>
                     </form>
 
                 </div>
