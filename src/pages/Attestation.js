@@ -11,7 +11,7 @@ function Attestation() {
     const onChangeName = ({ target }) => setName(target.value);
     const [contracts, setContracts] = React.useState("");
     const onChangeContracts = ({ target }) => setContracts(target.value);
-    const [checkbox, setCheckbox] = React.useState(false);
+    const [checkbox, setCheckbox] = React.useState("");
     const onChangeCheckbox = ({ target }) => setCheckbox(!target.value);
 
 
@@ -46,7 +46,7 @@ function Attestation() {
                         console.log("Schema encoder test passed: ",schemaEncoder);
 
                         const encodedData = schemaEncoder.encodeData([
-                        { name: "projectName", value: name, type: "string" }, //for some reason param "value" doesn't get through
+                        { name: "projectName", value: name, type: "string" }, //for some reason param "value" doesn't
                         { name: "smartContracts", value: contractsArray, type: "address[]" },
                         ]);
                         console.log("encodedData test passed: ",encodedData)
