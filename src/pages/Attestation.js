@@ -6,6 +6,14 @@ import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { getSigner } from '.././connectWallet.js';
 
+const provider = ethers.providers.getDefaultProvider(
+    "sepolia"
+  );
+// Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.' TRY CHANGING NETWORK TO SEPOLIA
+// When changed to Sepolia - Error: Unable to process attestation events
+const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli
+const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
+
 function Attestation() {
     const [name, setName] = React.useState("");
     const onChangeName = ({ target }) => setName(target.value);
@@ -15,14 +23,9 @@ function Attestation() {
     const onChangeCheckbox = ({ target }) => setCheckbox(!target.value);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [attestationUID, setAttestationUID] = useState("");
     const [isLoadingImpact, setIsLoadingImpact] = useState(true);
-
-    // Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.' TRY CHANGING NETWORK TO SEPOLIA
-    // When changed to Sepolia - Error: Unable to process attestation events
-
-    const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli
-    const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
+    const [attestationUID, setAttestationUID] = useState("");
+    const [projectRank, setProjectRank] = useState("");
 
     async function createAttestation() {
         console.log("createAttestation test passed");
@@ -77,6 +80,7 @@ function Attestation() {
                         const newAttestationUID = 1; //temporary
                         console.log("New attestation UID:", newAttestationUID);
                         setAttestationUID(newAttestationUID);
+                        getRank();
 
                     } else {
                         console.log("createAttestation Error: invalid smart contracts array input");
@@ -88,6 +92,29 @@ function Attestation() {
             console.log("createAttestation Error: ", error);
         }
     }
+
+    async function getRank() {
+        try {
+            const attestation = await eas.getAttestation(attestationUID);
+            const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
+            const decodedData = schemaEncoder.decodeData(attestation.data);
+            const contractArray = decodedData[1];
+            // Get through each contract one by one (for loop)
+            // Get data for it using Covalent or other service 
+            // Save this data somewhere
+            // Get all that data and put it into some formula to calculate the impact rank
+
+            for(let i = 0; i < contractArray.length; i++) {
+                // START HERE!!!
+            }
+
+            setProjectRank(1);
+            setIsLoadingImpact(false);
+        } catch (error) {
+            console.log("getRank Error: ", error);
+        }
+    }
+
     return (
         <div class="bg-[#050401]">
             <Navbar />
@@ -113,7 +140,7 @@ function Attestation() {
                         <span className="sr-only">Loading...</span>
                     </div>
                     <div className={`overflow-x-hidden overflow-y-auto ${!isLoadingImpact ? '' : 'hidden'}`}>
-                        <p class="text-base text-gray-900 dark:text-white">Your project impact rank is: </p>
+                        <p class="text-base text-gray-900 dark:text-white">Your project impact rank is: {projectRank}</p>
                         <p class="text-base text-gray-900 dark:text-white">Your project is now displayed on the dashboard.</p>
                     </div>
                 </div>
