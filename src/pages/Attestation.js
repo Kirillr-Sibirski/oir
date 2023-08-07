@@ -4,7 +4,7 @@ import Footer from ".././Navigation/Footer.js";
 import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
-import { getSigner } from '.././connectWallet.js';
+import { getSigner } from '.././utils/connectWallet.js';
 
 const provider = ethers.providers.getDefaultProvider(
     "sepolia"
