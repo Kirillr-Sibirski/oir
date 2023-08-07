@@ -1,7 +1,7 @@
 // Define the variables and constants needed for the calculation
 const API_KEY = process.env.COVALENT_API_KEY; // Replace with your own API key
 const CHAIN_ID = 1; // Ethereum mainnet
-const PROJECT_ADDRESS = "0xbD2245353f27CA2F1915443d922eD4a8d25c45a6"; // Replace with your own project address
+//const projectAddress = "0xbD2245353f27CA2F1915443d922eD4a8d25c45a6"; // Replace with your own project address
 const NETWORK_TOTALS = {
   tokenValue: 1000000000, // Total value of all tokens on the network in USD
   portfolioValueChange: 0.1, // Percentage change in portfolio value over time for the whole network
@@ -31,9 +31,9 @@ function normalize(value, min, max) {
 }
 
 // Define a main function to calculate the impact rank of a project using the formula and the data from Covalent API
-export async function calculateImpactRank() { // The metrics that go inside the calculation must be rethinked before releasing this project to production
+export async function calculateImpactRank(projectAddress) { // The metrics that go inside the calculation must be rethinked before releasing this project to production
     // Get token balances for address
-    const tokenBalances = await fetchData(`address/${PROJECT_ADDRESS}/balances_v2`);
+    const tokenBalances = await fetchData(`address/${projectAddress}/balances_v2`);
     //console.log("tokenBalanaces: ",tokenBalances);
 
     // Calculate token score by summing up token values and dividing by network total
@@ -45,7 +45,7 @@ export async function calculateImpactRank() { // The metrics that go inside the 
     //console.log("tokenScore: ",tokenScore);
 
     // Get historical portfolio value over time
-    // const portfolioValues = await fetchData(`address/${PROJECT_ADDRESS}/portfolio_v2`);
+    // const portfolioValues = await fetchData(`address/${projectAddress}/portfolio_v2`);
     //console.log("portfolioValues: ",portfolioValues);
 
     // // Calculate portfolio score by getting percentage change in portfolio value over time and dividing by network total
@@ -57,7 +57,7 @@ export async function calculateImpactRank() { // The metrics that go inside the 
     // console.log("portfolioScore: ",portfolioScore);
 
     // Get transactions
-    const transactions = await fetchData(`address/${PROJECT_ADDRESS}/transactions_v2`);
+    const transactions = await fetchData(`address/${projectAddress}/transactions_v2`);
     // console.log("transactions: ",transactions);
     // Calculate transaction score by getting transaction count and dividing by network total
 
@@ -67,7 +67,7 @@ export async function calculateImpactRank() { // The metrics that go inside the 
     // console.log("transactionScore: ",transactionScore);
 
     // // Get log events by topic hash
-    // const logEvents = await fetchData(`events/address/${PROJECT_ADDRESS}/`);
+    // const logEvents = await fetchData(`events/address/${projectAddress}/`);
     // console.log("logEvents: ",logEvents);
     // let logEventCount = logEvents.length; // total_count is a null
 
@@ -85,10 +85,7 @@ export async function calculateImpactRank() { // The metrics that go inside the 
 
     // Calculate impact rank by applying the formula
     let impactRank = (0.2 * tokenScore) + (0.2 * transactionScore) + (0.2 * gasScore);
-    console.log("tokenScore: ",tokenScore," transactionScore: ",transactionScore," gasScore: ",gasScore);
+    console.log("Impact rank: ",impactRank);
     // Return the impact rank
     return impactRank;
 }
-
-// Call the main function and console.log the result
-calculateImpactRank().then(result => console.log("Impact rank for this project is: ",result));

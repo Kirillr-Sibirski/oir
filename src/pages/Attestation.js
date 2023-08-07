@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { getSigner } from '../utils/connectWallet.js';
+import { calculateImpactRank } from '../utils/covalent.js';
 
 const provider = ethers.providers.getDefaultProvider(
     "sepolia"
@@ -101,11 +102,13 @@ function Attestation() {
             // Save this data somewhere
             // Get all that data and put it into some formula to calculate the impact rank
 
+            let sum = 0;
             for(let i = 0; i < contractArray.length; i++) {
-                // START HERE!!!
+                sum =+ await calculateImpactRank(contractArray[i]); // getting the metric for each of the smart contracts
             }
 
-            setProjectRank(1);
+            let _projectRank = sum/(contractArray.length+1); // Calculating the whole project rank based on all the smart contracts
+            setProjectRank(_projectRank);
             setIsLoadingImpact(false);
         } catch (error) {
             console.log("getRank Error: ", error);
