@@ -35,7 +35,7 @@ function Attestation() {
                 if(typeof name === 'string' || name instanceof String) {
                     console.log("Name verification test passed");
                     eas.connect(getSigner());
-                    
+
                     // String manipulations
                     const contractsNoSpace = contracts.replace(/ /g,''); // Delete all spaces
                     const contractsArray = contractsNoSpace.split(","); // Turn it into an array
@@ -51,7 +51,7 @@ function Attestation() {
                         console.log("Address verification test passed");
 
                         setIsLoading(true); // show loading icon
-                        /*
+
                         // Initialize SchemaEncoder with the schema string
                         const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
                         console.log("Schema encoder test passed: ",schemaEncoder);
@@ -63,7 +63,7 @@ function Attestation() {
                         console.log("encodedData test passed: ",encodedData)
 
                         const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // Sepolia schema //"0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli
-                        
+
                         const tx = await eas.attest({
                             schema: schemaUID,
                             data: {
@@ -73,14 +73,14 @@ function Attestation() {
                                 data: encodedData,
                             },
                         });
-                
+
                         console.log("TX test passed: ",tx); // Transaction has been created
                         const newAttestationUID = await tx.wait();
-                        */
-                        const newAttestationUID = 1; //temporary
+
+                        // const newAttestationUID = 1; //temporary
                         console.log("New attestation UID:", newAttestationUID);
                         setAttestationUID(newAttestationUID);
-                        getRank();
+                        getRank(newAttestationUID);
 
                     } else {
                         console.log("createAttestation Error: invalid smart contracts array input");
@@ -93,14 +93,14 @@ function Attestation() {
         }
     }
 
-    async function getRank() {
+    async function getRank(uid) {
         try {
-            const attestation = await eas.getAttestation(attestationUID);
+            const attestation = await eas.getAttestation(uid);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
             const contractArray = decodedData[1];
             // Get through each contract one by one (for loop)
-            // Get data for it using Covalent or other service 
+            // Get data for it using Covalent or other service
             // Save this data somewhere
             // Get all that data and put it into some formula to calculate the impact rank
 
@@ -118,7 +118,7 @@ function Attestation() {
     return (
         <div class="bg-[#050401]">
             <Navbar />
-                <div className={`overflow-x-hidden overflow-y-auto ${isLoading ? '' : 'hidden'}`} id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">              
+                <div className={`overflow-x-hidden overflow-y-auto ${isLoading ? '' : 'hidden'}`} id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div
                         role="status"
                         id="status"
@@ -148,32 +148,32 @@ function Attestation() {
                     <form>
                         <div class="mb-6">
                             <label for="default-input" class="block mb-2 text-sm font-medium text-[#fffaff] dark:text-[#fffaff]">Project name</label>
-                            <input 
-                                type="text" 
-                                id="default-input" 
-                                class="bg-[#303036] text-gray-900 text-sm rounded-lg focus:ring-[#30bced] focus:border-[#30bced] block w-full p-2.5 dark:bg-[#303036] dark:border-[#30bced] dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#30bced] dark:focus:border-[#30bced]" 
+                            <input
+                                type="text"
+                                id="default-input"
+                                class="bg-[#303036] text-gray-900 text-sm rounded-lg focus:ring-[#30bced] focus:border-[#30bced] block w-full p-2.5 dark:bg-[#303036] dark:border-[#30bced] dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#30bced] dark:focus:border-[#30bced]"
                                 value={name}
                                 onChange={onChangeName}
                             />
                         </div>
                         <div class="mb-6">
                             <label for="large-input" class="block mb-2 text-sm font-medium text-[#fffaff] dark:text-[#fffaff]">Enter all of the project's smart contract addresses separated by comma (,)</label>
-                            <input 
-                                type="text" 
-                                id="large-input" 
-                                class="block w-full p-4 text-gray-900 rounded-lg bg-[#303036] sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-[#303036] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            <input
+                                type="text"
+                                id="large-input"
+                                class="block w-full p-4 text-gray-900 rounded-lg bg-[#303036] sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-[#303036] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 value={contracts}
                                 onChange={onChangeContracts}
                             />
                         </div>
                         <div class="flex items-start mb-6">
                             <div class="flex items-center h-5">
-                            <input 
-                                id="remember" 
-                                type="checkbox" 
+                            <input
+                                id="remember"
+                                type="checkbox"
                                 value={checkbox}
                                 onChange={onChangeCheckbox}
-                                class="w-4 h-4 border border-[#303036] rounded bg-[#fffaff] focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required 
+                                class="w-4 h-4 border border-[#303036] rounded bg-[#fffaff] focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required
                             />
                             </div>
                             <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-[#fffaff]">I understood how this <a href="#" class="text-[#30bced] hover:underline dark:text-[#30bced]">works</a>.</label>
