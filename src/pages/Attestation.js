@@ -96,7 +96,8 @@ function Attestation() {
             const attestation = await eas.getAttestation(uid);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
-            const contractArray = decodedData[1];
+            const contractArray = decodedData[1].value.value;
+            console.log(contractArray);
             // Get through each contract one by one (for loop)
             // Get data for it using Covalent or other service
             // Save this data somewhere
@@ -105,11 +106,13 @@ function Attestation() {
             let sum = 0;
             for(let i = 0; i < contractArray.length; i++) {
                 sum =+ await calculateImpactRank(contractArray[i]); // getting the metric for each of the smart contracts
+                console.log("Rank: ",i," ",sum);
             }
 
             let _projectRank = sum/(contractArray.length+1); // Calculating the whole project rank based on all the smart contracts
-            setProjectRank(_projectRank);
-            setIsLoadingImpact(false);
+            console.log("Project rank: ",_projectRank)
+            //setProjectRank(_projectRank);
+            //setIsLoadingImpact(false);
         } catch (error) {
             console.log("getRank Error: ", error);
         }

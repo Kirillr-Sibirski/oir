@@ -32,60 +32,65 @@ function normalize(value, min, max) {
 
 // Define a main function to calculate the impact rank of a project using the formula and the data from Covalent API
 export async function calculateImpactRank(projectAddress) { // The metrics that go inside the calculation must be rethinked before releasing this project to production
-    // Get token balances for address
-    const tokenBalances = await fetchData(`address/${projectAddress}/balances_v2`);
-    //console.log("tokenBalanaces: ",tokenBalances);
+    try {
+      console.log("calculate impact rank called"); // doesn't seem to pass this test
+      // Get token balances for address
+      const tokenBalances = await fetchData(`address/${projectAddress}/balances_v2`);
+      //console.log("tokenBalanaces: ",tokenBalances);
 
-    // Calculate token score by summing up token values and dividing by network total
-    let tokenValue = 0;
-    for (let item of tokenBalances.items) {
-    tokenValue += item.quote;
-    }
-    let tokenScore = normalize(tokenValue, MIN_MAX_VALUES.tokenValue.min, MIN_MAX_VALUES.tokenValue.max) * 100;
-    //console.log("tokenScore: ",tokenScore);
+      // Calculate token score by summing up token values and dividing by network total
+      let tokenValue = 0;
+      for (let item of tokenBalances.items) {
+      tokenValue += item.quote;
+      }
+      let tokenScore = normalize(tokenValue, MIN_MAX_VALUES.tokenValue.min, MIN_MAX_VALUES.tokenValue.max) * 100;
+      //console.log("tokenScore: ",tokenScore);
 
-    // Get historical portfolio value over time
-    // const portfolioValues = await fetchData(`address/${projectAddress}/portfolio_v2`);
-    //console.log("portfolioValues: ",portfolioValues);
+      // Get historical portfolio value over time
+      // const portfolioValues = await fetchData(`address/${projectAddress}/portfolio_v2`);
+      //console.log("portfolioValues: ",portfolioValues);
 
-    // // Calculate portfolio score by getting percentage change in portfolio value over time and dividing by network total
-    // let portfolioValueArray = portfolioValues.items[0].holdings.map(item => item.portfolio_value); // This will create an array of portfolio values for each date using the first token balance item
-    // console.log("portfolioValueArray: ",portfolioValueArray);
-    // let portfolioValueChange = (portfolioValueArray[portfolioValueArray.length - 1] - portfolioValueArray[0]) / portfolioValueArray[0]; // This will calculate the percentage change in portfolio value from the first date to the last date
-    // console.log("portfolioValueChange: ",portfolioValueChange);
-    // let portfolioScore = normalize(portfolioValueChange, MIN_MAX_VALUES.portfolioValueChange.min, MIN_MAX_VALUES.portfolioValueChange.max) * 100; // This will normalize and scale the portfolio score
-    // console.log("portfolioScore: ",portfolioScore);
+      // // Calculate portfolio score by getting percentage change in portfolio value over time and dividing by network total
+      // let portfolioValueArray = portfolioValues.items[0].holdings.map(item => item.portfolio_value); // This will create an array of portfolio values for each date using the first token balance item
+      // console.log("portfolioValueArray: ",portfolioValueArray);
+      // let portfolioValueChange = (portfolioValueArray[portfolioValueArray.length - 1] - portfolioValueArray[0]) / portfolioValueArray[0]; // This will calculate the percentage change in portfolio value from the first date to the last date
+      // console.log("portfolioValueChange: ",portfolioValueChange);
+      // let portfolioScore = normalize(portfolioValueChange, MIN_MAX_VALUES.portfolioValueChange.min, MIN_MAX_VALUES.portfolioValueChange.max) * 100; // This will normalize and scale the portfolio score
+      // console.log("portfolioScore: ",portfolioScore);
 
-    // Get transactions
-    const transactions = await fetchData(`address/${projectAddress}/transactions_v2`);
-    // console.log("transactions: ",transactions);
-    // Calculate transaction score by getting transaction count and dividing by network total
+      // Get transactions
+      const transactions = await fetchData(`address/${projectAddress}/transactions_v2`);
+      // console.log("transactions: ",transactions);
+      // Calculate transaction score by getting transaction count and dividing by network total
 
-    let transactionCount = transactions.items.length; // total_count is a null that's where the problem lays so I feel like we could just do it manually from code without using existing fucntions
-    // console.log("transactionCount: ",transactionCount);
-    let transactionScore = normalize(transactionCount, MIN_MAX_VALUES.transactionCount.min, MIN_MAX_VALUES.transactionCount.max) * 100;
-    // console.log("transactionScore: ",transactionScore);
+      let transactionCount = transactions.items.length; // total_count is a null that's where the problem lays so I feel like we could just do it manually from code without using existing fucntions
+      // console.log("transactionCount: ",transactionCount);
+      let transactionScore = normalize(transactionCount, MIN_MAX_VALUES.transactionCount.min, MIN_MAX_VALUES.transactionCount.max) * 100;
+      // console.log("transactionScore: ",transactionScore);
 
-    // // Get log events by topic hash
-    // const logEvents = await fetchData(`events/address/${projectAddress}/`);
-    // console.log("logEvents: ",logEvents);
-    // let logEventCount = logEvents.length; // total_count is a null
+      // // Get log events by topic hash
+      // const logEvents = await fetchData(`events/address/${projectAddress}/`);
+      // console.log("logEvents: ",logEvents);
+      // let logEventCount = logEvents.length; // total_count is a null
 
-    // // Calculate log event score by getting log event count and dividing by network total
-    // let logEventScore = normalize(logEventCount, MIN_MAX_VALUES.logEventCount.min, MIN_MAX_VALUES.logEventCount.max) * 100;
+      // // Calculate log event score by getting log event count and dividing by network total
+      // let logEventScore = normalize(logEventCount, MIN_MAX_VALUES.logEventCount.min, MIN_MAX_VALUES.logEventCount.max) * 100;
 
-    // Calculate gas score by summing up gas spent and dividing by network total
-    let gasSpent = 0;
-    for (let item of transactions.items) {
-        gasSpent += item.gas_spent;
-    }
-    // console.log("gasSpent: ",gasSpent);
-    let gasScore = normalize(gasSpent, MIN_MAX_VALUES.gasSpent.min, MIN_MAX_VALUES.gasSpent.max) * 100;
-    // console.log("gasScore: ",gasScore);
+      // Calculate gas score by summing up gas spent and dividing by network total
+      let gasSpent = 0;
+      for (let item of transactions.items) {
+          gasSpent += item.gas_spent;
+      }
+      // console.log("gasSpent: ",gasSpent);
+      let gasScore = normalize(gasSpent, MIN_MAX_VALUES.gasSpent.min, MIN_MAX_VALUES.gasSpent.max) * 100;
+      // console.log("gasScore: ",gasScore);
 
-    // Calculate impact rank by applying the formula
-    let impactRank = (0.2 * tokenScore) + (0.2 * transactionScore) + (0.2 * gasScore);
-    console.log("Impact rank: ",impactRank);
-    // Return the impact rank
-    return impactRank;
+      // Calculate impact rank by applying the formula
+      let impactRank = (0.2 * tokenScore) + (0.2 * transactionScore) + (0.2 * gasScore);
+      console.log("Impact rank: ",impactRank);
+      // Return the impact rank
+      return impactRank;
+    } catch (error) {
+      console.log("calculateImpactRank (Covalent) Error: ", error);
+  }
 }
