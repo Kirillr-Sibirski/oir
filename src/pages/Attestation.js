@@ -186,7 +186,7 @@ function Attestation() {
                                 class="w-4 h-4 border border-[#303036] rounded bg-[#fffaff] focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required
                             />
                             </div>
-                            <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-[#fffaff]">I understood how this <a href="#" class="text-[#30bced] hover:underline dark:text-[#30bced]">works</a>.</label>
+                            <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-[#fffaff]">I understood how this <a href="/work" class="text-[#30bced] hover:underline dark:text-[#30bced]">works</a>.</label>
                         </div>
                         {/* Change type to "button" if want to see tests on console */}
                         <div>
