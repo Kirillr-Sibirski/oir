@@ -5,6 +5,7 @@ import { Connect } from '../utils/connectWallet.js'
 const navigation = [
   { name: 'Dashboard', href: '/' },
   { name: 'Submit your project', href: '/attestation' },
+  { name: 'How it works', href: '/work' },
 ]
 
 function classNames(...classes) {

@@ -1,6 +1,6 @@
 // Define the variables and constants needed for the calculation
 const API_KEY = process.env.REACT_APP_COVALENT_API_KEY; // Replace with your own API key
-const CHAIN_ID = 1; // Ethereum mainnet
+const CHAIN_ID = 420; // Optimism Goerli Testnet
 //const projectAddress = "0xbD2245353f27CA2F1915443d922eD4a8d25c45a6"; // Replace with your own project address
 const NETWORK_TOTALS = {
   tokenValue: 1000000000, // Total value of all tokens on the network in USD

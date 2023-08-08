@@ -7,12 +7,9 @@ import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestat
 import { getSigner } from '../utils/connectWallet.js';
 import { calculateImpactRank } from '../utils/covalent.js';
 
-const provider = ethers.providers.getDefaultProvider(
-    "sepolia"
-  );
-// Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.' TRY CHANGING NETWORK TO SEPOLIA
-// When changed to Sepolia - Error: Unable to process attestation events
-const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84" // Optimism Goerli
+// Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.'}
+// When changed to Sepolia
+const EASContractAddress = "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
 function Attestation() {
@@ -62,7 +59,7 @@ function Attestation() {
                         ]);
                         console.log("encodedData test passed: ",encodedData)
 
-                        const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // Sepolia schema //"0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli
+                        const schemaUID = "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // schema on Optimism Goerli "0x1bda524d814243905d395a50456796a5e08cb87e4d72eb434146a5081a1431a5"; // Sepolia schema
                         const tx = await eas.attest({
                             schema: schemaUID,
                             data: {
@@ -107,9 +104,6 @@ function Attestation() {
             // Get data for it using Covalent or other service
             // Save this data somewhere
             // Get all that data and put it into some formula to calculate the impact rank
-            const promiseCalc = new Promise((resolve, reject) => {
-
-            });
             let sum = 0;
             for(let i = 0; i < contractArray.length; i++) {
                 sum =+ await calculateImpactRank(contractArray[i]); // getting the metric for each of the smart contracts
