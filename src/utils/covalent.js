@@ -1,5 +1,5 @@
 // Define the variables and constants needed for the calculation
-const API_KEY = process.env.COVALENT_API_KEY; // Replace with your own API key
+const API_KEY = process.env.REACT_APP_COVALENT_API_KEY; // Replace with your own API key
 const CHAIN_ID = 1; // Ethereum mainnet
 //const projectAddress = "0xbD2245353f27CA2F1915443d922eD4a8d25c45a6"; // Replace with your own project address
 const NETWORK_TOTALS = {
@@ -32,7 +32,7 @@ function normalize(value, min, max) {
 
 // Define a main function to calculate the impact rank of a project using the formula and the data from Covalent API
 export async function calculateImpactRank(projectAddress) { // The metrics that go inside the calculation must be rethinked before releasing this project to production
-    try {
+  try {
       console.log("calculate impact rank called"); // doesn't seem to pass this test
       // Get token balances for address
       const tokenBalances = await fetchData(`address/${projectAddress}/balances_v2`);
