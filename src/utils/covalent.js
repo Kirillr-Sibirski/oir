@@ -36,7 +36,7 @@ export async function calculateImpactRank(projectAddress) { // The metrics that 
       console.log("calculate impact rank called"); // doesn't seem to pass this test
       // Get token balances for address
       const tokenBalances = await fetchData(`address/${projectAddress}/balances_v2`);
-      //console.log("tokenBalanaces: ",tokenBalances);
+      console.log("tokenBalanaces: ",tokenBalances);
 
       // Calculate token score by summing up token values and dividing by network total
       let tokenValue = 0;
@@ -44,7 +44,7 @@ export async function calculateImpactRank(projectAddress) { // The metrics that 
       tokenValue += item.quote;
       }
       let tokenScore = normalize(tokenValue, MIN_MAX_VALUES.tokenValue.min, MIN_MAX_VALUES.tokenValue.max) * 100;
-      //console.log("tokenScore: ",tokenScore);
+      console.log("tokenScore: ",tokenScore);
 
       // Get historical portfolio value over time
       // const portfolioValues = await fetchData(`address/${projectAddress}/portfolio_v2`);
@@ -60,13 +60,13 @@ export async function calculateImpactRank(projectAddress) { // The metrics that 
 
       // Get transactions
       const transactions = await fetchData(`address/${projectAddress}/transactions_v2`);
-      // console.log("transactions: ",transactions);
+      console.log("transactions: ",transactions);
       // Calculate transaction score by getting transaction count and dividing by network total
 
       let transactionCount = transactions.items.length; // total_count is a null that's where the problem lays so I feel like we could just do it manually from code without using existing fucntions
-      // console.log("transactionCount: ",transactionCount);
+      console.log("transactionCount: ",transactionCount);
       let transactionScore = normalize(transactionCount, MIN_MAX_VALUES.transactionCount.min, MIN_MAX_VALUES.transactionCount.max) * 100;
-      // console.log("transactionScore: ",transactionScore);
+      console.log("transactionScore: ",transactionScore);
 
       // // Get log events by topic hash
       // const logEvents = await fetchData(`events/address/${projectAddress}/`);
@@ -81,9 +81,9 @@ export async function calculateImpactRank(projectAddress) { // The metrics that 
       for (let item of transactions.items) {
           gasSpent += item.gas_spent;
       }
-      // console.log("gasSpent: ",gasSpent);
+      console.log("gasSpent: ",gasSpent);
       let gasScore = normalize(gasSpent, MIN_MAX_VALUES.gasSpent.min, MIN_MAX_VALUES.gasSpent.max) * 100;
-      // console.log("gasScore: ",gasScore);
+      console.log("gasScore: ",gasScore);
 
       // Calculate impact rank by applying the formula
       let impactRank = (0.2 * tokenScore) + (0.2 * transactionScore) + (0.2 * gasScore);
