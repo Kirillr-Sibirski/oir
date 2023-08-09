@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Connect } from '../utils/connectWallet.js'
 
 const navigation = [
-  { name: 'Dashboard', href: '/' },
+  { name: 'Leaderboard', href: '/' },
   { name: 'Submit your project', href: '/attestation' },
   { name: 'How it works', href: '/work' },
 ]
