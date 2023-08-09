@@ -15,6 +15,7 @@ function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [name, setName] = useState([]);
+  const [contract, setContract] = useState([[]]);
 
   useEffect(() => {
     async function fetchData() {
@@ -28,21 +29,23 @@ function Homepage() {
           if(a < b) return -1;
           return 0;
         });
-        sortedRecords.reverse();
         console.log(sortedRecords);
-
         setData(sortedRecords);
 
         setName([]);
-
+        setContract([[]]);
         for(let i = 0; i < sortedRecords.length; i++) {
             const attestation = await eas.getAttestation(sortedRecords[i].data.id);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
             const projectName = decodedData[0].value.value;
+            console.log(projectName);
             setName(oldArray => [...oldArray, projectName]);
+            const projectContracts = decodedData[1].value.value;
+            console.log(projectContracts);
+            setContract(oldArray => [...oldArray, projectContracts]);
         }
-        console.log("Names: ",name);
+
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -70,7 +73,7 @@ function Homepage() {
         </svg>
         <span className="sr-only">Loading...</span>
     </div>
-      <div className={`overflow-x-hidden overflow-y-auto ${!isLoading ? '' : 'hidden'}`}>
+      <div className={`overflow-x-auto overflow-y-auto ${!isLoading ? '' : 'hidden'}`}>
         <div className="relative overflow-x-auto">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#303036] dark:text-[#fffaff]">
@@ -82,7 +85,10 @@ function Homepage() {
                         Project
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Attestation address
+                        Attestation Address
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Smart Contracts
                     </th>
                 </tr>
             </thead>
@@ -97,6 +103,11 @@ function Homepage() {
                   </th>
                   <td className="px-6 py-4">{name[index]}</td>
                   <td className="px-6 py-4"><a href={`https://optimism-goerli-bedrock.easscan.org/attestation/view/${rowData.data.id}`}>{rowData.data.id}</a></td>
+                  <td className="px-6 py-4">
+                    <ul class="list-none">
+                      <li>{contract[index+1]}</li>
+                    </ul>
+                  </td>
                 </tr>
               ))}
             </tbody>
