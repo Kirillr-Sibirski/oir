@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { getSigner } from '../utils/connectWallet.js';
 import { calculateImpactRank } from '../utils/covalent.js';
+import { addAttestation } from '../utils/polybase.js';
 
 // Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.'}
 // When changed to Sepolia
@@ -80,6 +81,7 @@ function Attestation() {
                         getRank(newAttestationUID).then(result => {
                             setProjectRank(result);
                             setIsLoadingImpact(false);
+                            addAttestation(newAttestationUID, result);
                         });
 
                     } else {
