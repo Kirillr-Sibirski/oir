@@ -96,7 +96,7 @@ function Homepage() {
                     {rowData.data.rank}
                   </th>
                   <td className="px-6 py-4">{name[index]}</td>
-                  <td className="px-6 py-4">{rowData.data.id}</td>
+                  <td className="px-6 py-4"><a href={`https://optimism-goerli-bedrock.easscan.org/attestation/view/${rowData.data.id}`}>{rowData.data.id}</a></td>
                 </tr>
               ))}
             </tbody>
