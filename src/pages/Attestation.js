@@ -8,15 +8,8 @@ import { getSigner } from '../utils/connectWallet.js';
 import { calculateImpactRank } from '../utils/covalent.js';
 import { addAttestation } from '../utils/polybase.js';
 
-// Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.'}
-// When changed to Sepolia
 const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
-
-export async function _getAttestation(id) {
-    const attestation = await eas.getAttestation(id);
-    return attestation;
-}
 
 function Attestation() {
     const [name, setName] = React.useState("");
@@ -102,7 +95,7 @@ function Attestation() {
 
     async function getRank(uid) {
         try {
-            const attestation = await _getAttestation(uid);
+            const attestation = await eas.getAttestation(uid);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
             const contractArray = decodedData[1].value.value;

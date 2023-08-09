@@ -4,8 +4,12 @@ import Footer from ".././Navigation/Footer.js";
 import React, { useEffect, useState } from 'react';
 import { getAllRecords } from '../utils/polybase.js';
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
-import { _getAttestation } from './Attestation.js';
+import { getSigner } from '../utils/connectWallet.js';
 
+const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
+const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
+
+eas.connect(getSigner());
 
 function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,13 +19,20 @@ function Homepage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const records = await getAllRecords();
         // Sort recods in accending rank order before pushing them to the hook
-        for(let i = 0; i < data.length; i++) {
-            const projectName = _getAttestation(data[i].data.id);
-            setName(projectName);
-        }
+        const records = await getAllRecords();
         setData(records);
+        console.log("Records: ",data);
+        setName([]);
+
+        for(let i = 0; i < records.length; i++) {
+            const attestation = await eas.getAttestation(records[i].data.id);
+            const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
+            const decodedData = schemaEncoder.decodeData(attestation.data);
+            const projectName = decodedData[0].value.value;
+            setName(oldArray => [...oldArray, projectName]);
+        }
+        console.log("Names: ",name);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
