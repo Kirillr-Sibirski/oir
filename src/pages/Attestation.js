@@ -9,7 +9,7 @@ import { calculateImpactRank } from '../utils/covalent.js';
 
 // Get MetaMask - RPC Error: Internal JSON-RPC error. {code: -32603, message: 'Internal JSON-RPC error.'}
 // When changed to Sepolia
-const EASContractAddress = "0x1a5650d0ecbca349dd84bafa85790e3e6955eb84"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
+const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
 function Attestation() {
