@@ -2,8 +2,10 @@ import ".././index.css";
 import Navbar from ".././Navigation/Navbar.js";
 import Footer from ".././Navigation/Footer.js";
 import React, { useEffect, useState } from 'react';
+import { getAllRecords } from '../utils/polybase.js';
 
 function Homepage() {
+  console.log(getAllRecords);
   return (
     <div class="bg-[#050401]">
             <Navbar />
