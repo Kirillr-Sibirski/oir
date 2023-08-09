@@ -19,14 +19,24 @@ function Homepage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Sort recods in accending rank order before pushing them to the hook
         const records = await getAllRecords();
-        setData(records);
-        console.log("Records: ",data);
+
+        // Simple sorting algorithm to sort records in descending rank order
+        let sortedRecords = records;
+        sortedRecords.sort((a,b) => {
+          if(a > b) return 1;
+          if(a < b) return -1;
+          return 0;
+        });
+        sortedRecords.reverse();
+        console.log(sortedRecords);
+
+        setData(sortedRecords);
+
         setName([]);
 
-        for(let i = 0; i < records.length; i++) {
-            const attestation = await eas.getAttestation(records[i].data.id);
+        for(let i = 0; i < sortedRecords.length; i++) {
+            const attestation = await eas.getAttestation(sortedRecords[i].data.id);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
             const projectName = decodedData[0].value.value;
