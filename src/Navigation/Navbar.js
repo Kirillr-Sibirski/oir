@@ -13,20 +13,6 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const [selectedNetwork, setSelectedNetwork] = useState('Optimism'); // Add state for selected network
-  const [showDropdown, setShowDropdown] = useState(false); // Add state for dropdown visibility
-
-  const handleNetworkChange = async (event) => {
-    console.log(event.target.value);
-    setSelectedNetwork(event.target.value);
-    await Network(event.target.value); // Call the Network function with the selected chainId
-    setShowDropdown(false); // Hide the dropdown once the network is chosen
-  };
-
-  const handleNetworkButtonClick = () => {
-    setShowDropdown(!showDropdown); // Toggle dropdown visibility
-  };
-
   return (
     <Disclosure as="nav" className="bg-[#050401]">
       {({ open }) => (
@@ -62,25 +48,6 @@ export default function Navbar() {
                     ))}
                     <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
                           rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Connect}>Connect wallet</a>
-                    <button
-                      className="text-gray-300 hover:bg-[#303036] hover:text-[#fffaff] rounded-md px-3 py-2 text-sm font-medium"
-                      onClick={handleNetworkButtonClick}
-                    >
-                      Network
-                    </button>
-                    {showDropdown && (
-                      <div className="relative">
-                        <select
-                          id="network"
-                          className="bg-gray-900 text-gray-300 hover:bg-[#303036] hover:text-[#fffaff] rounded-md px-3 py-2 text-sm font-medium"
-                          value={selectedNetwork}
-                          onChange={handleNetworkChange}
-                        >
-                          <option value="Optimism">Optimism</option>
-                          <option value="Base">Base</option>
-                        </select>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

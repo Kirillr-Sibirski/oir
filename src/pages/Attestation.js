@@ -9,7 +9,7 @@ import { calculateImpactRank } from '../utils/covalent.js';
 import { addAttestation } from '../utils/polybase.js';
 
 
-function Attestation({ selectedNetwork }) {
+function Attestation() {
     const [name, setName] = React.useState("");
     const onChangeName = ({ target }) => setName(target.value);
     const [contracts, setContracts] = React.useState("");
@@ -23,13 +23,8 @@ function Attestation({ selectedNetwork }) {
     const [attestationUID, setAttestationUID] = useState("");
     const [projectRank, setProjectRank] = useState("");
 
-    console.log("Passed selectedNetwork: ", selectedNetwork);
 
-    const EASContractAddress =
-        selectedNetwork === 'Base'
-        ? "0xAcfE09Fd03f7812F022FBf636700AdEA18Fd2A7A" // Base Goerli Testnet
-        : "0x4200000000000000000000000000000000000021"; // Optimism Goerli
-    console.log("EASContract address: ", EASContractAddress);
+    const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli
 
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
