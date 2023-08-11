@@ -1,10 +1,10 @@
 import ".././index.css";
-import Navbar from ".././Navigation/Navbar.js";
 import Footer from ".././Navigation/Footer.js";
 import React, { useEffect, useState } from 'react';
 import { getAllRecords } from '../utils/polybase.js';
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { getSigner } from '../utils/connectWallet.js';
+import { Link } from 'react-router-dom';
 
 const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
 const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
@@ -92,7 +92,10 @@ function Homepage() {
                         Smart Contracts
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Validate/invalidated the info shown
+                        Validation-to-invalidation percentage
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Validate/invalidate the info shown
                     </th>
                 </tr>
             </thead>
@@ -115,10 +118,10 @@ function Homepage() {
                     </ul> 
                   </td>
                   <td className="px-6 py-4">
-                    <ul className="list-none">
-                      <li>Validate</li>
-                      <li>Invalidate</li>
-                    </ul>
+                      100%
+                  </td>
+                  <td className="px-6 py-4">
+                    <Link to={`/validate/${rowData.data.id}`}>Create a two-way attestation</Link>
                   </td>
                 </tr>
               ))}
