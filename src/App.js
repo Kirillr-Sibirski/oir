@@ -6,6 +6,7 @@ import Home from './pages/Homepage.js';
 import Attestation from './pages/Attestation.js'; 
 import Work from './pages/Work.js';
 import Navbar from './Navigation/Navbar.js'; // Import the Navbar component
+import Validate from './pages/Validation.js';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route path='/attestation' element={<Attestation />} />
         <Route path='/work' element={<Work />} />
+        <Route path='/validate' element={<Validate />} />
       </Routes>
     </Router>
   );

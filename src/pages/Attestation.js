@@ -29,7 +29,6 @@ function Attestation() {
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createAttestation() {
-        console.log("createAttestation test passed");
         try {
             if(checkbox) {
             console.log("Checkbox test passed");
