@@ -21,25 +21,55 @@ export const Connect = async function() {
         });
 }
 
-export const Network = async function(chainId) {
+export const Network = async function(network) {
     if (window.ethereum) {
-        try {
-            await window.ethereum.request({
-                method: "wallet_switchEthereumChain",
-                params: [{ chainId: chainId }],
-            });
-        } catch (error) {
-            if (error.code === 4902) {
-                // User rejected network switch
-                console.log("User rejected network switch");
-            } else {
-                console.error("Error switching network:", error);
-            }
+        let params;
+
+        switch (network) {
+            case 'Optimism':
+                params = {
+                    chainId: '0x1a4',
+                    rpcUrls: ['https://optimism-goerli.publicnode.com'],
+                    chainName: 'Optimism Goerli Testnet',
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ['https://goerli-optimism.etherscan.io/']
+                };
+                break;
+            case 'Zora':
+                // Define params for Zora network
+                break;
+            case 'Base':
+                // Define params for Base network
+                break;
+            default:
+                // Default to Optimism
+                params = {
+                    chainId: '0x1a4',
+                    rpcUrls: ['https://optimism-goerli.publicnode.com'],
+                    chainName: 'Optimism Goerli Testnet',
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ['https://goerli-optimism.etherscan.io/']
+                };
+                break;
         }
+
+        window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [params]
+        });
     } else {
-        alert("Connect wallet!");
+        alert('Connect wallet!');
     }
 };
+
 
 
 export const getSigner = function() {
