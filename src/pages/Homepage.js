@@ -91,6 +91,9 @@ function Homepage() {
                     <th scope="col" class="px-6 py-3">
                         Smart Contracts
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        Validate/invalidated the info shown
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -110,6 +113,12 @@ function Homepage() {
                         <li key={indexAddress}><a href={`https://goerli-optimism.etherscan.io/address/${address}`}>{address}</a></li>
                       ))}
                     </ul> 
+                  </td>
+                  <td className="px-6 py-4">
+                    <ul className="list-none">
+                      <li>Validate</li>
+                      <li>Invalidate</li>
+                    </ul>
                   </td>
                 </tr>
               ))}
