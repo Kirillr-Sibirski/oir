@@ -108,7 +108,7 @@ function Homepage() {
                   <td className="px-6 py-4">
                     <ul className="list-none">
                       {contract[index+1] && contract[index+1].map((address, indexAddress) => (
-                        <li key={indexAddress}>{address}</li>
+                        <li key={indexAddress}><a href={`https://goerli-optimism.etherscan.io/address/${address}`}>{address}</a></li>
                       ))}
                     </ul> 
                   </td>
