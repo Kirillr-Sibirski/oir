@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Connect } from '../utils/connectWallet.js'
+import { Connect, Network } from '../utils/connectWallet.js'
 
 const navigation = [
   { name: 'Leaderboard', href: '/' },
@@ -48,6 +48,8 @@ export default function Navbar() {
                     ))}
                     <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
                           rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Connect}>Connect wallet</a>
+                    <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
+                          rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Network}>Network</a>
                   </div>
                 </div>
               </div>
