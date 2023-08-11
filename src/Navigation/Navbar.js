@@ -17,6 +17,7 @@ export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false); // Add state for dropdown visibility
 
   const handleNetworkChange = async (event) => {
+    console.log(event.target.value);
     setSelectedNetwork(event.target.value);
     await Network(event.target.value); // Call the Network function with the selected chainId
     setShowDropdown(false); // Hide the dropdown once the network is chosen

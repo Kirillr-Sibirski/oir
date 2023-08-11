@@ -5,8 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 function Work() {
   return (
-    <div class="bg-[#050401]">
-        <Navbar />
+    <div class="bg-[#050401] h-screen">
             <p class="mb-3 text-gray-500 dark:text-gray-400">Optimism Impact Ranking (OIR) is a platform for evaluating project impact on-chain within the Optimism ecosystem. This process involves the following key steps:</p>
             <p class="text-gray-500 dark:text-gray-400">1. Attestation Creation: Projects generate an EAS attestation containing their project name and related smart contracts. Once created, this attestation becomes a permanent on-chain record.</p>
             <p class="text-gray-500 dark:text-gray-400">2. Smart Contract Analysis: The addresses of smart contracts are extracted, and Covalent APIs is employed to retrieve essential data like user engagement, transaction activities, and contract specifics etc.</p>

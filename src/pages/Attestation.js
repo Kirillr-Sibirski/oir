@@ -8,10 +8,8 @@ import { getSigner } from '../utils/connectWallet.js';
 import { calculateImpactRank } from '../utils/covalent.js';
 import { addAttestation } from '../utils/polybase.js';
 
-const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli // "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26 // 
-const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
-function Attestation() {
+function Attestation({ selectedNetwork }) {
     const [name, setName] = React.useState("");
     const onChangeName = ({ target }) => setName(target.value);
     const [contracts, setContracts] = React.useState("");
@@ -24,6 +22,16 @@ function Attestation() {
     const [isLoadingImpact, setIsLoadingImpact] = useState(true);
     const [attestationUID, setAttestationUID] = useState("");
     const [projectRank, setProjectRank] = useState("");
+
+    console.log("Passed selectedNetwork: ", selectedNetwork);
+
+    const EASContractAddress =
+        selectedNetwork === 'Base'
+        ? "0xAcfE09Fd03f7812F022FBf636700AdEA18Fd2A7A" // Base Goerli Testnet
+        : "0x4200000000000000000000000000000000000021"; // Optimism Goerli
+    console.log("EASContract address: ", EASContractAddress);
+
+    const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createAttestation() {
         console.log("createAttestation test passed");
@@ -39,6 +47,7 @@ function Attestation() {
 
                     console.log("Name: ", name)
                     console.log("Contracts: ", contractsArray);
+                    console.log("EAS Address: ",EASContractAddress);
 
                     let state = true;
                     for (let i = 0; i < contractsArray.length; i++) {
@@ -120,8 +129,7 @@ function Attestation() {
     }
 
     return (
-        <div class="bg-[#050401]">
-            <Navbar />
+        <div class="bg-[#050401] h-screen">
                 <div className={`overflow-x-hidden overflow-y-auto ${isLoading ? '' : 'hidden'}`} id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div
                         role="status"

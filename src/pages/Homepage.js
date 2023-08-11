@@ -59,8 +59,7 @@ function Homepage() {
   }, []);
 
   return (
-    <div className="bg-[#050401]">
-      <Navbar />
+    <div className="bg-[#050401] h-screen">
       <div className={`overflow-x-hidden overflow-y-auto ${isLoading ? '' : 'hidden'}`}>
         <p class="text-base text-gray-900 dark:text-white">Loading the leaderboard...</p>
         <svg
@@ -118,7 +117,7 @@ function Homepage() {
         </table>
         </div>
       </div>
-      <Footer />
+    <Footer />
     </div>
   );
 }
