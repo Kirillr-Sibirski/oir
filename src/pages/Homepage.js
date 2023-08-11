@@ -15,7 +15,7 @@ function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [name, setName] = useState([]);
-  const [contract, setContract] = useState([[]]);
+  const [contract, setContract] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,20 +29,22 @@ function Homepage() {
           if(a < b) return -1;
           return 0;
         });
-        console.log(sortedRecords);
+        console.log("sortedRecords: ", sortedRecords);
         setData(sortedRecords);
 
         setName([]);
         setContract([[]]);
         for(let i = 0; i < sortedRecords.length; i++) {
+            console.log("Attestation uid:  ",sortedRecords[i].data.id);
             const attestation = await eas.getAttestation(sortedRecords[i].data.id);
+            console.log("Attestation: ",attestation);
             const schemaEncoder = new SchemaEncoder("string projectName, address[] smartContracts");
             const decodedData = schemaEncoder.decodeData(attestation.data);
             const projectName = decodedData[0].value.value;
-            console.log(projectName);
+            console.log("ProjectName: ",projectName);
             setName(oldArray => [...oldArray, projectName]);
             const projectContracts = decodedData[1].value.value;
-            console.log(projectContracts);
+            console.log("projectContracts: ", projectContracts);
             setContract(oldArray => [...oldArray, projectContracts]);
         }
 
@@ -104,9 +106,11 @@ function Homepage() {
                   <td className="px-6 py-4">{name[index]}</td>
                   <td className="px-6 py-4"><a href={`https://optimism-goerli-bedrock.easscan.org/attestation/view/${rowData.data.id}`}>{rowData.data.id}</a></td>
                   <td className="px-6 py-4">
-                    <ul class="list-none">
-                      <li>{contract[index+1]}</li>
-                    </ul>
+                    <ul className="list-none">
+                      {contract[index+1] && contract[index+1].map((address, indexAddress) => (
+                        <li key={indexAddress}>{address}</li>
+                      ))}
+                    </ul> 
                   </td>
                 </tr>
               ))}
