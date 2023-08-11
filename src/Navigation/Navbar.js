@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Connect, Network } from '../utils/connectWallet.js'
 
@@ -13,6 +13,34 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const [selectedNetwork, setSelectedNetwork] = useState('Optimism'); // Add state for selected network
+  const [showDropdown, setShowDropdown] = useState(false); // Add state for dropdown visibility
+
+  const handleNetworkChange = async (event) => {
+    setSelectedNetwork(event.target.value);
+    let chainId;
+    switch (event.target.value) {
+      case 'Optimism':
+        chainId = '0x1a4';
+        break;
+      case 'Zora':
+        chainId = '0x64';
+        break;
+      case 'Base':
+        chainId = '0x89';
+        break;
+      default:
+        chainId = '0x1a4';
+        break;
+    }
+    await Network(chainId); // Call the Network function with the selected chainId
+    setShowDropdown(false); // Hide the dropdown once the network is chosen
+  };
+
+  const handleNetworkButtonClick = () => {
+    setShowDropdown(!showDropdown); // Toggle dropdown visibility
+  };
+
   return (
     <Disclosure as="nav" className="bg-[#050401]">
       {({ open }) => (
@@ -48,8 +76,26 @@ export default function Navbar() {
                     ))}
                     <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
                           rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Connect}>Connect wallet</a>
-                    <a className='text-gray-300 hover:bg-[#303036] hover:text-[#fffaff]
-                          rounded-md px-3 py-2 text-sm font-medium' hreaf="#" onClick={Network}>Network</a>
+                    <button
+                      className="text-gray-300 hover:bg-[#303036] hover:text-[#fffaff] rounded-md px-3 py-2 text-sm font-medium"
+                      onClick={handleNetworkButtonClick}
+                    >
+                      Network
+                    </button>
+                    {showDropdown && (
+                      <div className="relative">
+                        <select
+                          id="network"
+                          className="bg-gray-900 text-gray-300 hover:bg-[#303036] hover:text-[#fffaff] rounded-md px-3 py-2 text-sm font-medium"
+                          value={selectedNetwork}
+                          onChange={handleNetworkChange}
+                        >
+                          <option value="Optimism">Optimism</option>
+                          <option value="Zora">Zora</option>
+                          <option value="Base">Base</option>
+                        </select>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
