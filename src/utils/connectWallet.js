@@ -39,11 +39,18 @@ export const Network = async function(network) {
                     blockExplorerUrls: ['https://goerli-optimism.etherscan.io/']
                 };
                 break;
-            case 'Zora':
-                // Define params for Zora network
-                break;
             case 'Base':
-                // Define params for Base network
+                params = {
+                    chainId: '0x14a33',
+                    rpcUrls: ['https://goerli.base.org'],
+                    chainName: 'Base Goerli Testnet',
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ['https://goerli.basescan.org/']
+                };
                 break;
             default:
                 // Default to Optimism

@@ -18,22 +18,7 @@ export default function Navbar() {
 
   const handleNetworkChange = async (event) => {
     setSelectedNetwork(event.target.value);
-    let chainId;
-    switch (event.target.value) {
-      case 'Optimism':
-        chainId = '0x1a4';
-        break;
-      case 'Zora':
-        chainId = '0x64';
-        break;
-      case 'Base':
-        chainId = '0x89';
-        break;
-      default:
-        chainId = '0x1a4';
-        break;
-    }
-    await Network(chainId); // Call the Network function with the selected chainId
+    await Network(event.target.value); // Call the Network function with the selected chainId
     setShowDropdown(false); // Hide the dropdown once the network is chosen
   };
 
@@ -91,7 +76,6 @@ export default function Navbar() {
                           onChange={handleNetworkChange}
                         >
                           <option value="Optimism">Optimism</option>
-                          <option value="Zora">Zora</option>
                           <option value="Base">Base</option>
                         </select>
                       </div>
