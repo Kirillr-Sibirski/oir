@@ -5,11 +5,10 @@ import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { useParams } from 'react-router-dom';
 import { getSigner } from '../utils/connectWallet.js';
-import { IDKitWidget } from '@worldcoin/idkit'
+import { CredentialType, IDKitWidget } from "@worldcoin/idkit";
+import { onSuccess, handleProof } from '../utils/worldcoin';
 
-
-
-function Validation() {
+async function Validation() {
     const [validation, setValidation] = React.useState(true);
     const [isLoadingAttestation, setIsLoadingAttestation] = useState(false);
     const [isLoadingWorldcoin, setIisLoadingWorldcoin] = useState(false);
@@ -24,20 +23,10 @@ function Validation() {
     const eas = new EAS(EASContractAddress); // Initialize the sdk with the address of the EAS Schema contract address
 
     async function createValidation() {
-        try {
-            setIisLoadingWorldcoin(true);
-            // Worldcoin verification goes here
-        } catch (error) {
-            console.log("createValidation Error: ", error);
-        }
+        setIisLoadingWorldcoin(true);
     }
 
-    async function validateProof(proof) {
-        // Validate proof using the API here
-        worldcoinValidated();
-    }
-
-    async function worldcoinValidated() {
+    async function createAttestation() { // call once worldcoin is verified
         try {
             setIisLoadingWorldcoin(false);
             setIsLoadingAttestation(true);
@@ -74,15 +63,11 @@ function Validation() {
         }
     }
 
-    function onSuccess(){
-        console.log("callback when the modal is closed");
-    }
-
     return (
         <div class="bg-[#050401] h-screen">
             <div className={`overflow-x-hidden overflow-y-auto`}>
                 <form>
-                <div className={`flex items-start mb-6 overflow-x-hidden overflow-y-auto ${!isLoadingAttestation || isLoadingWorldcoin ? '' : 'hidden'}`}>
+                <div className={`flex items-start mb-6 overflow-x-hidden overflow-y-auto ${!isLoadingAttestation ? '' : 'hidden'}`}>
                     <label class="relative inline-flex items-center cursor-pointer">
                     <input 
                         type="checkbox" 
@@ -102,7 +87,7 @@ function Validation() {
                     role="status"
                     id="status"
                     tabIndex="-1"
-                    className={`overflow-x-hidden overflow-y-auto ${!isLoadingAttestation || isLoadingWorldcoin ? '' : 'hidden'}`}
+                    className={`overflow-x-hidden overflow-y-auto ${!isLoadingAttestation? '' : 'hidden'}`}
                 >
                     <button
                         type="button"
@@ -115,14 +100,18 @@ function Validation() {
                 </div>
                 <div className={`overflow-x-hidden overflow-y-auto ${isLoadingWorldcoin ? '' : 'hidden'}`}>
                 <IDKitWidget
-                    app_id="app_staging_5fb4eebc66b2fe494896c9db24f2ba93" // obtained from the Developer Portal
+                    app_id="app_4218684bc0d4cc097377bc6f54a3fd82" // obtained from the Developer Portal
                     action="validate-attestation" // this is your action name from the Developer Portal
                     onSuccess={onSuccess} // callback when the modal is closed
-                    handleVerify={validateProof} // optional callback when the proof is received
-                    credential_types={['phone']} // optional, defaults to ['orb']
+                    handleVerify={handleProof}
+                    credential_types={[CredentialType.Phone]} // optional, defaults to ['orb']
                     enableTelemetry // optional, defaults to false
                 >
-                    {({ open }) => <button onClick={open}>Verify with World ID</button>}
+                    {({ open }) => <button 
+                        type="button"
+                        data-modal-toggle="status"
+                        className={`text-white bg-[#30bced] hover:bg-[#30bced] focus:ring-4 focus:outline-none focus:ring-[#30bced] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#30bced] dark:hover:bg-[#30bced] dark:focus:ring-[#30bced]}`}
+                        onClick={open}>Verify with World ID</button>}
                 </IDKitWidget>
                 </div>
                 <div
