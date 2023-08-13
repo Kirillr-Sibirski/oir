@@ -5,11 +5,14 @@ import { ethers } from "ethers";
 import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { useParams } from 'react-router-dom';
 import { getSigner } from '../utils/connectWallet.js';
+import { IDKitWidget } from '@worldcoin/idkit'
+
 
 
 function Validation() {
     const [validation, setValidation] = React.useState(true);
     const [isLoadingAttestation, setIsLoadingAttestation] = useState(false);
+    const [isLoadingWorldcoin, setIisLoadingWorldcoin] = useState(false);
     const [attestationUID, setAttestationUID] = useState("");
     const [attestationLoaded, setAttestationLoaded] = useState(false);
 
@@ -22,6 +25,21 @@ function Validation() {
 
     async function createValidation() {
         try {
+            setIisLoadingWorldcoin(true);
+            // Worldcoin verification goes here
+        } catch (error) {
+            console.log("createValidation Error: ", error);
+        }
+    }
+
+    async function validateProof(proof) {
+        // Validate proof using the API here
+        worldcoinValidated();
+    }
+
+    async function worldcoinValidated() {
+        try {
+            setIisLoadingWorldcoin(false);
             setIsLoadingAttestation(true);
             eas.connect(getSigner());
             // Initialize SchemaEncoder with the schema string
@@ -52,15 +70,19 @@ function Validation() {
             setAttestationUID(newAttestationUID);
             setAttestationLoaded(true);
         } catch (error) {
-            console.log("createAttestation Error: ", error);
+            console.log("worldcoinValidation Error: ", error);
         }
+    }
+
+    function onSuccess(){
+        console.log("callback when the modal is closed");
     }
 
     return (
         <div class="bg-[#050401] h-screen">
             <div className={`overflow-x-hidden overflow-y-auto`}>
                 <form>
-                <div className={`flex items-start mb-6 overflow-x-hidden overflow-y-auto ${!isLoadingAttestation ? '' : 'hidden'}`}>
+                <div className={`flex items-start mb-6 overflow-x-hidden overflow-y-auto ${!isLoadingAttestation || isLoadingWorldcoin ? '' : 'hidden'}`}>
                     <label class="relative inline-flex items-center cursor-pointer">
                     <input 
                         type="checkbox" 
@@ -80,7 +102,7 @@ function Validation() {
                     role="status"
                     id="status"
                     tabIndex="-1"
-                    className={`overflow-x-hidden overflow-y-auto ${!isLoadingAttestation ? '' : 'hidden'}`}
+                    className={`overflow-x-hidden overflow-y-auto ${!isLoadingAttestation || isLoadingWorldcoin ? '' : 'hidden'}`}
                 >
                     <button
                         type="button"
@@ -91,11 +113,23 @@ function Validation() {
                         Submit
                     </button>
                 </div>
+                <div className={`overflow-x-hidden overflow-y-auto ${isLoadingWorldcoin ? '' : 'hidden'}`}>
+                <IDKitWidget
+                    app_id="app_staging_5fb4eebc66b2fe494896c9db24f2ba93" // obtained from the Developer Portal
+                    action="validate-attestation" // this is your action name from the Developer Portal
+                    onSuccess={onSuccess} // callback when the modal is closed
+                    handleVerify={validateProof} // optional callback when the proof is received
+                    credential_types={['phone']} // optional, defaults to ['orb']
+                    enableTelemetry // optional, defaults to false
+                >
+                    {({ open }) => <button onClick={open}>Verify with World ID</button>}
+                </IDKitWidget>
+                </div>
                 <div
                     role="status"
                     id="status"
                     tabIndex="-1"
-                    className={`overflow-x-hidden overflow-y-auto ${isLoadingAttestation && !attestationLoaded ? '' : 'hidden'}`}
+                    className={`overflow-x-hidden overflow-y-auto ${isLoadingAttestation && !attestationLoaded && !isLoadingWorldcoin ? '' : 'hidden'}`}
                 >
                     <svg
                     aria-hidden="true"
