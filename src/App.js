@@ -6,7 +6,7 @@ import Home from './pages/Homepage.js';
 import Attestation from './pages/Attestation.js'; 
 import Work from './pages/Work.js';
 import Navbar from './Navigation/Navbar.js'; // Import the Navbar component
-import Validate from './pages/Validation.js';
+import Validate from './pages/Validation.tsx';
 
 function App() {
 
