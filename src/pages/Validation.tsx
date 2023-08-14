@@ -58,6 +58,7 @@ function Validation(): JSX.Element {
 			},
 			body: JSON.stringify(reqBody),
 		})
+        console.log("Res: ", res);
 		const data: VerifyReply = await res.json()
 		if (res.status == 200) {
 			console.log("Successful response from backend:\n", data); // Log the response from our backend for visibility
