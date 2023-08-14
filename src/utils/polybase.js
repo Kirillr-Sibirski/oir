@@ -19,3 +19,17 @@ export async function getAllRecords() {
     const records = await collectionReference.get();
     return records.data;
 }
+
+export async function addValidation(uid, validation) {
+  const record = await collectionReference.record(uid).get();
+
+  if (record.data) {
+    const existingData = record.data[2] || []; // Check if the array exists or initialize it
+    existingData.push(validation);
+
+    // Update the record with the new array
+    await collectionReference.record(uid).update({
+      2: existingData,
+    });
+  }
+}

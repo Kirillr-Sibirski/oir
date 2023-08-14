@@ -8,6 +8,7 @@ import { getSigner } from '../utils/connectWallet.js';
 import { CredentialType, IDKitWidget } from "@worldcoin/idkit";
 import { ISuccessResult } from "@worldcoin/idkit";
 import { VerifyReply } from "./api/verify";
+import { addValidation } from '../utils/polybase.js';
 
 interface ISuccessResultWithHash extends ISuccessResult {
     nullifier_hash: string;
@@ -96,7 +97,7 @@ function Validation(): JSX.Element {
             console.log("TX test passed: ",tx); // Transaction has been created
             const newAttestationUID = await tx.wait();
 
-            
+            addValidation(id, newAttestationUID); // Add a new two-way attestation to Polybase db
             console.log("New attestation UID:", newAttestationUID);
             setAttestationUID(newAttestationUID);
             setAttestationLoaded(true);
@@ -125,7 +126,7 @@ function Validation(): JSX.Element {
 
             </div>
             <div className={`flex items-start mb-6 overflow-x-hidden overflow-y-auto ${attestationLoaded ? '' : 'hidden'}`}>
-                <p className="text-base text-[#fffaff] dark:text-white">Your attestation UID is: {attestationUID}</p>
+                <p className="text-base text-[#fffaff] dark:text-white">We have recorder your action. Your attestation UID is: {attestationUID}</p>
             </div>
             <div
                 role="status"

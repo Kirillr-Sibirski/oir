@@ -16,6 +16,7 @@ function Homepage() {
   const [data, setData] = useState([]);
   const [name, setName] = useState([]);
   const [contract, setContract] = useState([]);
+  const [percentage, setPercentage] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,6 +32,24 @@ function Homepage() {
         });
         console.log("sortedRecords: ", sortedRecords);
         setData(sortedRecords);
+        for (i = 0, i < sortedRecords.data.validations.length; i++;){
+          let counterTrue = 0;
+          let counterFalse = 0;
+          for (ii = 0, ii < sortedRecords.data.validations[i].length; ii++;){
+            const valID = sortedRecords.data.validations[ii];
+            const attestation = await eas.getAttestation(valID);
+            const schemaEncoder = new SchemaEncoder("bool Validate");
+            const decodedData = schemaEncoder.decodeData(attestation.data);
+            const bool = decodedData[0].value.value;
+            if(bool) {
+              counterTrue++;
+            } else {
+              counterFalse++;
+            }
+          }
+          setPercentage(oldArray => [...oldArray, counterTrue/counterFalse*100]);
+        }
+
 
         setName([]);
         setContract([[]]);
@@ -118,7 +137,7 @@ function Homepage() {
                     </ul> 
                   </td>
                   <td className="px-6 py-4">
-                      100%
+                      {percentage[index]}
                   </td>
                   <td className="px-6 py-4">
                     <Link to={`/validate/${rowData.data.id}`}>Create a two-way attestation</Link>
