@@ -11,7 +11,7 @@ export type VerifyReply = {
   detail: string;
 };
 
-const verifyEndpoint = `${process.env.NEXT_PUBLIC_WLD_API_BASE_URL}/api/v1/verify/${process.env.NEXT_PUBLIC_WLD_APP_ID}`;
+const verifyEndpoint = `${process.env.REACT_APP_WLD_API_BASE_URL}/api/v1/verify/${process.env.REACT_APP_WLD_APP_ID}`;
 
 export default function handler(
   req: NextApiRequest,
