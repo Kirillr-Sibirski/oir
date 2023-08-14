@@ -33,8 +33,8 @@ function Homepage() {
         console.log("sortedRecords: ", sortedRecords);
         setData(sortedRecords);
         for (i = 0, i < sortedRecords.data.validations.length; i++;){
-          let counterTrue = 0;
-          let counterFalse = 0;
+          let counterTrue = 1; // Not 0 so it doesn't cause the 'division by 0' problem
+          let counterFalse = 1;
           for (ii = 0, ii < sortedRecords.data.validations[i].length; ii++;){
             const valID = sortedRecords.data.validations[ii];
             const attestation = await eas.getAttestation(valID);
